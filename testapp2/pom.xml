@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>dobpm-rest</groupId>
@@ -8,7 +7,7 @@
 	<url>http://maven.apache.org</url>
 
 	<packaging>war</packaging>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<properties>
 		<java-version>1.7</java-version>
 		<org.springframework-version>4.2.6.RELEASE</org.springframework-version>
@@ -333,7 +332,57 @@
 					<mainClass>org.test.int1.Main</mainClass>
 				</configuration>
 			</plugin>
-		</plugins>
+		<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <configuration>
+                        <target>
+                        <property name="version" value="${project.version}"/>
+                        <ant antfile="${project.basedir}/src/main/resources/ant/copy-zips.xml"/>
+                        </target>
+                    </configuration>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <dependencies>
+                <dependency>
+                    <groupId>ant-contrib</groupId>
+                    <artifactId>ant-contrib</artifactId>
+                    <version>1.0b3</version>
+                    <exclusions>
+                        <exclusion>
+                            <artifactId>ant</artifactId>
+                            <groupId>ant</groupId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+            <configuration>
+            </configuration>
+        </plugin><plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/resources/assembly/assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<id>create-distribution</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+</plugin></plugins>
 		<finalName>${project.artifactId}</finalName>
 	</build>
-</project>
+<distributionManagement><repository><id>deploymentRepo</id><name>Internal Releases</name><url>http://172.16.0.56:8081/repository/dobpm-releases/</url></repository></distributionManagement></project>
